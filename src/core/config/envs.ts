@@ -4,10 +4,16 @@
 import { z } from "zod";
 
 const envsSchema = z.object({
-  APP_PORT: z.number().positive("APP_PORT must be a positive number"),
+  APP_PORT: z
+    .string()
+    .transform((val) => parseInt(val, 10))
+    .pipe(z.number().positive("APP_PORT must be a positive number")),
 
   DB_MYSQL_HOST: z.string().min(1, "DB_MYSQL_HOST is required"),
-  DB_MYSQL_PORT: z.number().positive("DB_MYSQL_PORT must be a positive number"),
+  DB_MYSQL_PORT: z
+    .string()
+    .transform((val) => parseInt(val, 10))
+    .pipe(z.number().positive("DB_MYSQL_PORT must be a positive number")),
   DB_MYSQL_USER: z.string().min(1, "DB_MYSQL_USER is required"),
   DB_MYSQL_PASSWORD: z.string().min(1, "DB_MYSQL_PASSWORD is required"),
   DB_MYSQL_DATABASE: z.string().min(1, "DB_MYSQL_DATABASE is required"),
