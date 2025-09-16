@@ -49,7 +49,7 @@ export default function Header01() {
             </Suspense>
             <div className="flex gap-2">
               <Link
-                href="/login"
+                href="/sing-in"
                 className={buttonVariants({ variant: "default" })}
               >
                 Get Started
@@ -95,7 +95,7 @@ export default function Header01() {
                 <div className="border-t pt-4">
                   <div className="mt-2 flex flex-col gap-2">
                     <Link
-                      href="/login"
+                      href="/sign-in"
                       className={buttonVariants({ variant: "default" })}
                     >
                       Get Started
