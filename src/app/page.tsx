@@ -37,7 +37,7 @@ export default async function Home() {
               </a>
               <DropdownMenuItem>Preço</DropdownMenuItem>
               <DropdownMenuItem>
-                <Link href="/login">
+                <Link href="/sign-in">
                   <Button variant={"default"}>Login</Button>
                 </Link>
               </DropdownMenuItem>
@@ -56,7 +56,7 @@ export default async function Home() {
             <Link href={"#preco"}>
               <Button variant={"link"}>Preço</Button>
             </Link>
-            <Link href="/login">
+            <Link href="/sign-in">
               <Button variant={"destructive"}>Login</Button>
             </Link>
           </div>
