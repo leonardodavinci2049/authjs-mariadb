@@ -1,19 +1,19 @@
-import { buttonVariants } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
-import { Download } from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
-import bookImg from './book.png';
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { Download } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import bookImg from "./book.png";
 
 const MonthlyBook = () => {
   return (
     <>
-      <h1 className="text-3xl font-bold mb-6">Livro do Mês</h1>
+      <h1 className="mb-6 text-3xl font-bold">Livro do Mês</h1>
       <Image src={bookImg} alt="Livro do mês" />
       <Link
         className={cn(
-          'flex items-center justify-center gap-4 mt-10',
-          buttonVariants()
+          "mt-10 flex items-center justify-center gap-4",
+          buttonVariants(),
         )}
         href="/livro.pdf"
         target="_blank"
@@ -22,6 +22,6 @@ const MonthlyBook = () => {
       </Link>
     </>
   );
-}
+};
 
-export default MonthlyBook
+export default MonthlyBook;

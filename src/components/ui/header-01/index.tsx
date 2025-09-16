@@ -14,14 +14,14 @@ import Link from "next/link";
 import { Suspense } from "react";
 
 const TopMenu = [
-    { name: "Dashboard", href: "/dashboard" },
-    { name: "Resource", href: "/resource" },
-    { name: "Features", href: "/feature" },
-  ];
+  { name: "Dashboard", href: "/dashboard" },
+  { name: "Resource", href: "/resource" },
+  { name: "Features", href: "/feature" },
+];
 export default function Header01() {
   return (
-<header className="sticky top-5 z-50 flex justify-center container mx-auto px-4">
-      <div className="min-w-full border rounded-md  w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 py-2.5 px-4">
+    <header className="sticky top-5 z-50 container mx-auto flex justify-center px-4">
+      <div className="bg-background/95 supports-[backdrop-filter]:bg-background/60 w-full min-w-full rounded-md border px-4 py-2.5 backdrop-blur">
         <nav className="hidden justify-between lg:flex">
           <div className="flex items-center gap-6">
             <Link href="/" className="flex items-center gap-1">
@@ -29,14 +29,14 @@ export default function Header01() {
               <span className="text-xl font-bold">StarterBlocks</span>
             </Link>
           </div>
-          <div className="items-center flex gap-6">
+          <div className="flex items-center gap-6">
             <div className="flex items-center">
               {TopMenu.map((menu, idx) => (
                 <a
                   key={idx}
                   className={cn(
                     buttonVariants({ variant: "ghost" }),
-                    navigationMenuTriggerStyle
+                    navigationMenuTriggerStyle,
                   )}
                   href={menu.href}
                 >
@@ -86,7 +86,7 @@ export default function Header01() {
                     <a
                       key={idx}
                       href="#"
-                      className="font-semibold text-lg py-2"
+                      className="py-2 text-lg font-semibold"
                     >
                       {menu.name}
                     </a>
