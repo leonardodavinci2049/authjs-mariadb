@@ -9,6 +9,23 @@ const envsSchema = z.object({
     .transform((val) => parseInt(val, 10))
     .pipe(z.number().positive("APP_PORT must be a positive number")),
 
+  SYSTEM_ID: z
+    .string()
+    .transform((val) => parseInt(val, 10))
+    .pipe(z.number().positive("SYSTEM_ID must be a positive number")),
+  STORE_ID: z
+    .string()
+    .transform((val) => parseInt(val, 10))
+    .pipe(z.number().positive("STORE_ID must be a positive number")),
+  USER_ID: z
+    .string()
+    .transform((val) => parseInt(val, 10))
+    .pipe(z.number().positive("USER_ID must be a positive number")),
+  TYPE_BUSINESS: z
+    .string()
+    .transform((val) => parseInt(val, 10))
+    .pipe(z.number().positive("TYPE_BUSINESS must be a positive number")),
+
   DB_MYSQL_HOST: z.string().min(1, "DB_MYSQL_HOST is required"),
   DB_MYSQL_PORT: z
     .string()
@@ -43,6 +60,11 @@ if (typeof window === "undefined") {
   envVars = {
     APP_PORT: 0,
 
+    SYSTEM_ID: 0,
+    STORE_ID: 0,
+    USER_ID: 0,
+    TYPE_BUSINESS: 0,
+
     DB_MYSQL_HOST: "",
     DB_MYSQL_PORT: 0,
     DB_MYSQL_USER: "",
@@ -53,6 +75,12 @@ if (typeof window === "undefined") {
 
 export const envs = {
   APP_PORT: envVars.APP_PORT,
+
+  SYSTEM_ID: envVars.SYSTEM_ID,
+  STORE_ID: envVars.STORE_ID,
+  USER_ID: envVars.USER_ID,
+  TYPE_BUSINESS: envVars.TYPE_BUSINESS,
+
   DB_MYSQL_HOST: envVars.DB_MYSQL_HOST,
   DB_MYSQL_PORT: envVars.DB_MYSQL_PORT,
   DB_MYSQL_USER: envVars.DB_MYSQL_USER,
