@@ -11,6 +11,7 @@ export function AuthSignUpQuery(dataJsonDto: AuthSignUpDto): string {
   const olName = dataJsonDto.NAME;
   const olEmail = dataJsonDto.EMAIL;
   const olPasswordMd5 = dataJsonDto.PASSWORD_MD5;
+  const olInfo1 = dataJsonDto.INFO1 ?? "";
 
   const queryString = ` call sp_auth_signUp_v2(
        ${olSystemClientId},
@@ -20,7 +21,8 @@ export function AuthSignUpQuery(dataJsonDto: AuthSignUpDto): string {
        '${olUuid}',
        '${olName}',
        '${olEmail}',
-       '${olPasswordMd5}'
+       '${olPasswordMd5}',
+       '${olInfo1}'
        ) `;
 
   return queryString;
