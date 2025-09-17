@@ -64,7 +64,7 @@ const CheckPage = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ TERMO: email }),
+        body: JSON.stringify({ TERM: email }),
       });
 
       const result = await response.json();
@@ -92,7 +92,7 @@ const CheckPage = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ TERMO: cpf.replace(/\D/g, "") }),
+        body: JSON.stringify({ TERM: cpf.replace(/\D/g, "") }),
       });
 
       const result = await response.json();
@@ -120,7 +120,7 @@ const CheckPage = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ TERMO: cnpj.replace(/\D/g, "") }),
+        body: JSON.stringify({ TERM: cnpj.replace(/\D/g, "") }),
       });
 
       const result = await response.json();

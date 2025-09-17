@@ -1,8 +1,6 @@
 export interface CheckIfCnpjExistsDto {
-  ID_SYSTEM?: number;
-  ID_LOJA: number;
-  ID_USUARIO: number;
-  TERMO: string;
+  USER_ID: number;
+  TERM: string;
 }
 
 // Função de validação para CNPJ
@@ -15,22 +13,17 @@ export function validateCheckIfCnpjExistsDto(
 
   const dto = data as Record<string, unknown>;
 
-  if (typeof dto.ID_LOJA !== "number" || dto.ID_LOJA <= 0) {
-    throw new Error("ID_LOJA deve ser um número inteiro positivo");
-  }
 
-  if (typeof dto.ID_USUARIO !== "number" || dto.ID_USUARIO <= 0) {
+  if (typeof dto.USER_ID !== "number" || dto.USER_ID <= 0) {
     throw new Error("ID_USUARIO deve ser um número inteiro positivo");
   }
 
-  if (typeof dto.TERMO !== "string" || dto.TERMO.trim() === "") {
-    throw new Error("TERMO deve ser uma string válida não vazia");
+  if (typeof dto.TERM !== "string" || dto.TERM.trim() === "") {
+    throw new Error("TERM deve ser uma string válida não vazia");
   }
 
   return {
-    ID_SYSTEM: dto.ID_SYSTEM ? Number(dto.ID_SYSTEM) : undefined,
-    ID_LOJA: dto.ID_LOJA,
-    ID_USUARIO: dto.ID_USUARIO,
-    TERMO: dto.TERMO.trim(),
+    USER_ID: dto.USER_ID as number,
+    TERM: (dto.TERM as string).trim(),
   };
 }
