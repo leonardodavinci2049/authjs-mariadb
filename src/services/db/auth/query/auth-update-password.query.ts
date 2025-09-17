@@ -10,7 +10,7 @@ export function AuthUpdatePasswordQuery(
   const olUserId = dataJsonDto.USER_ID;
   const olPasswordMd5 = dataJsonDto.PASSWORD_MD5;
 
-  const queryString = ` call sp_auth_update_password_v1(
+  const queryString = ` call sp_auth_update_password_v2(
        ${olSystemClientId},
        ${olStoreId},
        ${olAppId},
