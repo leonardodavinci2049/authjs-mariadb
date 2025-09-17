@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import checkService from "@/services/db/check/check.service";
-import { envs } from "@/core/config/envs";
 
 interface CheckResultData {
   ID_CHECK: number;
@@ -8,32 +7,30 @@ interface CheckResultData {
 }
 
 interface FeedbackData {
-  pl_id_cadastro: number;
-  pl_feedback: string;
-  pl_id_erro: number;
+  sp_return_id: number;
+  sp_message: string;
+  sp_error_id: number;
 }
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
 
-    // Validação básica - apenas TERMO é necessário do cliente
-    if (!body.TERMO) {
+    // Validação básica - apenas TERM é necessário do cliente
+    if (!body.TERM) {
       return NextResponse.json(
         {
           error: "Dados obrigatórios faltando",
-          required: ["TERMO"],
+          required: ["TERM"],
         },
         { status: 400 },
       );
     }
 
     // Carregar valores das variáveis de ambiente
-    const requestData = {
-      ID_SYSTEM: envs.SYSTEM_ID,
-      ID_LOJA: envs.STORE_ID,
-      ID_USUARIO: envs.USER_ID,
-      TERMO: body.TERMO,
+    const requestData = {   
+      USER_ID: 1,
+      TERM: body.TERM,
     };
 
     const result = await checkService.tskCheckIfCnpjExist(requestData);
@@ -42,9 +39,9 @@ export async function POST(request: NextRequest) {
     try {
       const data = result.data as [CheckResultData[], FeedbackData[], unknown];
       const idCheck = data[0][0]?.ID_CHECK;
-      const feedback = data[1][0]?.pl_feedback;
+      const feedback = data[1][0]?.sp_message;
 
-      // ID_CHECK = 1 significa que o termo existe
+      // ID_CHECK = 1 significa que o term existe
       const exists = idCheck === 1;
 
       return NextResponse.json({

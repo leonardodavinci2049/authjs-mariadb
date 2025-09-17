@@ -1,9 +1,9 @@
 import { RowDataPacket } from "mysql2";
 
 export interface SpDefaultFeedback extends RowDataPacket {
-  pl_id_cadastro: number;
-  pl_feedback: string;
-  pl_id_erro: number;
+  sp_return_id: number;
+  sp_message: string;
+  sp_error_id: number;
 }
 
 // Database operation result

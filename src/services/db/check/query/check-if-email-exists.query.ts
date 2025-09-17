@@ -1,18 +1,21 @@
+import { envs } from "@/core/config";
 import { CheckIfEmailExistsDto } from "../dto/check-if-email-exists.dto";
 
 export function CheckIfEmailExistsQuery(
   dataJsonDto: CheckIfEmailExistsDto,
 ): string {
-  const olIdSystem = dataJsonDto.ID_SYSTEM;
-  const olIdLoja = dataJsonDto.ID_LOJA ?? 1;
-  const olIdUsuario = dataJsonDto.ID_USUARIO;
-  const termo = dataJsonDto.TERMO;
+  const olSystemClientId = envs.SYSTEM_CLIENT_ID;
+  const olStoreId = envs.STORE_ID ?? 1;
+  const olAppId = envs.APP_ID;
+  const olUserId = dataJsonDto.USER_ID;
+  const olTerm = dataJsonDto.TERM;
 
-  const queryString = ` call sp_check_if_email_exists(
-       ${olIdSystem},
-       ${olIdLoja},
-       ${olIdUsuario},
-       '${termo}'
+  const queryString = ` call sp_check_if_email_exists_V2(
+       ${olSystemClientId},
+       ${olStoreId},
+       ${olAppId},
+       ${olUserId},
+       '${olTerm}'
        ) `;
 
   return queryString;
