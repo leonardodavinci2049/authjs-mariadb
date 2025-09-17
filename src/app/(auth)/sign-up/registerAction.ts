@@ -1,6 +1,8 @@
 "use server";
 
-//import { hashSync } from "bcrypt-ts";
+import crypto from "crypto";
+import authService from "@/services/db/auth/auth.service";
+import { validateRegisterForm } from "@/lib/constants/validation-constants";
 
 // Definir o tipo do estado
 type RegisterState = {
@@ -15,6 +17,11 @@ type RegisterFormData = {
   password: string;
 };
 
+// Função para gerar hash MD5
+function generateMD5Hash(password: string): string {
+  return crypto.createHash("md5").update(password).digest("hex");
+}
+
 async function registerAction(
   _prevState: RegisterState,
   formData: FormData,
@@ -22,45 +29,57 @@ async function registerAction(
   const entries = Array.from(formData.entries());
   const data = Object.fromEntries(entries) as RegisterFormData;
 
-  // console.log("Form Data1:", data);
-
-  // Validação básica
-  if (!data.name || !data.email || !data.password) {
+  // Validação dos dados do formulário
+  const validation = validateRegisterForm(data);
+  if (!validation.isValid) {
+    const firstError = Object.values(validation.errors)[0];
     return {
-      message: "Todos os campos são obrigatórios.",
+      message: firstError,
       success: false,
     };
   }
 
   try {
-    // Verificação de duplicidade no banco de dados
-    const existingUser ={}
+    // Gerar hash MD5 da senha (após validação)
+    const passwordMD5 = generateMD5Hash(data.password);
 
-    if (existingUser) {
+    // Preparar dados para o serviço de autenticação
+    const signUpData = {
+      USER_ID: 1,
+      NAME: data.name,
+      EMAIL: data.email,
+      PASSWORD_MD5: passwordMD5,
+      INFO1: "Formulário Sign-up",
+    };
+
+    // Chamar o serviço de cadastro
+    const result = await authService.tskAuthSignUp(signUpData);
+
+    // Verificar se o cadastro foi bem-sucedido
+    // StatusCode 100200 indica sucesso
+    if (result.statusCode === 100200 && result.recordId > 0) {
       return {
-        message: "Este email já está cadastrado.",
+        message: "Usuário cadastrado com sucesso!",
+        success: true,
+      };
+    } else {
+      return {
+        message:
+          result.message || "Erro ao cadastrar usuário. Tente novamente.",
+        success: false,
+      };
+    }
+  } catch (error) {
+    console.error("Erro no cadastro:", error);
+
+    // Verificar se é um erro de validação específico
+    if (error instanceof Error) {
+      return {
+        message: error.message,
         success: false,
       };
     }
 
-    // Hash da senha
-   // const hashedPassword = hashSync('19372846');
-
-    // Criar usuário
-/*     await cnxDataBase.user.create({
-      data: {
-        name: data.name,
-        email: data.email,
-        password: hashedPassword,
-      },
-    });
- */
-    return {
-      message: "Usuário cadastrado com sucesso!",
-      success: true,
-    };
-  } catch (error) {
-    console.error("Erro no cadastro:", error);
     return {
       message: "Erro interno do servidor. Tente novamente.",
       success: false,

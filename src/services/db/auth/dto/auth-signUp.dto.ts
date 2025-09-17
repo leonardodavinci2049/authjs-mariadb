@@ -40,12 +40,10 @@ export function validateAuthSignUpDto(data: unknown): AuthSignUpDto {
   if (
     typeof dto.PASSWORD_MD5 !== "string" ||
     dto.PASSWORD_MD5.trim() === "" ||
-    !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
-      dto.PASSWORD_MD5,
-    )
+    !/^[a-f0-9]{32}$/.test(dto.PASSWORD_MD5.trim())
   ) {
     throw new Error(
-      "SENHA deve ter no mínimo 8 caracteres, incluindo pelo menos uma letra minúscula, uma letra maiúscula, um número e um caractere especial",
+      "PASSWORD_MD5 deve ser um hash MD5 válido (32 caracteres hexadecimais)",
     );
   }
 
