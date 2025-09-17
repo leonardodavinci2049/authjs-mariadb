@@ -10,7 +10,7 @@ export function CheckIfEmailExistsQuery(
   const olUserId = dataJsonDto.USER_ID;
   const olTerm = dataJsonDto.TERM;
 
-  const queryString = ` call sp_check_if_email_exists_V2(
+  const queryString = ` call sp_check_if_email_exists_v2(
        ${olSystemClientId},
        ${olStoreId},
        ${olAppId},

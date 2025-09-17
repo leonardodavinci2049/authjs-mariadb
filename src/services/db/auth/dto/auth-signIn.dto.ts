@@ -1,4 +1,5 @@
 export interface AuthSignInDto {
+  USER_ID?: number;
   EMAIL: string;
   PASSWORD_MD5: string
 }
@@ -10,6 +11,15 @@ export function validateAuthSignInDto(data: unknown): AuthSignInDto {
   }
 
   const dto = data as Record<string, unknown>;
+
+  // Validação de ID_USUARIO (opcional)
+  if (
+    dto.USER_ID !== undefined &&
+    (typeof dto.USER_ID !== "number" || dto.USER_ID <= 0)
+  ) {
+    throw new Error("ID_USUARIO deve ser um número inteiro positivo");
+  }
+
 
   // Validação do EMAIL
   if (
@@ -34,6 +44,7 @@ export function validateAuthSignInDto(data: unknown): AuthSignInDto {
   }
 
   return {
+    USER_ID: dto.USER_ID,
     EMAIL: dto.EMAIL.trim(),
     PASSWORD_MD5: dto.PASSWORD_MD5.trim(),
   };
