@@ -1,41 +1,27 @@
-import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
-} from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import Link from 'next/link';
+} from "@/components/ui/card";
+import Link from "next/link";
+import LoginForm from "./login-form";
 
 export default async function LoginPage() {
   return (
     <>
-      <Card className="max-w-sm w-full rounded-2xl mt-12">
+      <Card className="mt-12 w-full max-w-sm rounded-2xl">
         <CardHeader>
           <h2 className="text-xl font-bold">Boas Vindas</h2>
           <CardDescription>Faça seu login com email e senha.</CardDescription>
         </CardHeader>
         <CardContent>
-          <div>
-            <Label>Email</Label>
-            <Input type="email" name="email" placeholder="eu@exemplo.com" />
-          </div>
-          <div>
-            <Label>Senha</Label>
-            <Input type="password" name="password" placeholder="********" />
-          </div>
-          <div>
-            <Button className="w-full mt-6" type="submit">
-              Login
-            </Button>
-          </div>
+          <LoginForm />
         </CardContent>
       </Card>
-      <p className="text-sm text-muted-foreground mt-3">
-        Não possui cadastro?{' '}
-        <Link className="text-gray-800 hover:underline" href="/sig">
+      <p className="text-muted-foreground mt-3 text-sm">
+        Não possui cadastro?{" "}
+        <Link className="text-gray-800 hover:underline" href="/sign-up">
           Registre-se
         </Link>
         .
