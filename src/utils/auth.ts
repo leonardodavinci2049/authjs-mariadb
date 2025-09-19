@@ -1,8 +1,24 @@
 import { betterAuth } from "better-auth";
-import { mysqlAdapter } from "./betterAuthAdapter";
+import { nextCookies } from "better-auth/next-js";
+import { createPool } from "mysql2/promise";
+import { envs } from "@/core/config/envs";
 
 export const auth = betterAuth({
-  secret: process.env.AUTH_SECRET!, // Gere algo seguro (openssl rand -base64 32)
-  adapter: mysqlAdapter,
-  emailAndPassword: true, // Habilita login com email/senha
+  secret: envs.AUTH_SECRET,
+  database: createPool({
+    host: envs.DB_MYSQL_HOST,
+    port: envs.DB_MYSQL_PORT,
+    user: envs.DB_MYSQL_USER,
+    password: envs.DB_MYSQL_PASSWORD,
+    database: envs.DB_MYSQL_DATABASE,
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0,
+  }),
+  emailAndPassword: {
+    enabled: true,
+  },
+  plugins: [
+    nextCookies(), // make sure this is the last plugin in the array
+  ],
 });

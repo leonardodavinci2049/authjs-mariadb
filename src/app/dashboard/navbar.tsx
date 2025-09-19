@@ -13,11 +13,21 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { User } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
 
 export default function Navbar({ userName }: { userName: string }) {
   const pathname = usePathname();
-  console.log(pathname);
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    try {
+      await authClient.signOut();
+      router.push("/sign-in");
+    } catch (error) {
+      console.error("Erro ao fazer logout:", error);
+    }
+  };
 
   return (
     <header className="bg-white shadow-sm">
@@ -62,7 +72,7 @@ export default function Navbar({ userName }: { userName: string }) {
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild>
-                <button>Logout</button>
+                <button onClick={handleLogout}>Logout</button>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

@@ -1,8 +1,8 @@
 "use server";
 
-import crypto from "crypto";
-import authService from "@/services/db/auth/auth.service";
-import { validateRegisterForm } from "@/lib/constants/validation-constants";
+import { auth } from "@/utils/auth";
+import { redirect } from "next/navigation";
+import { isRedirectError } from "next/dist/client/components/redirect-error";
 
 // Definir o tipo do estado
 type RegisterState = {
@@ -10,81 +10,51 @@ type RegisterState = {
   success: boolean;
 } | null;
 
-// Definir o tipo dos dados do formulário
-type RegisterFormData = {
-  name: string;
-  email: string;
-  password: string;
-};
-
-// Função para gerar hash MD5
-function generateMD5Hash(password: string): string {
-  return crypto.createHash("md5").update(password).digest("hex");
-}
-
-async function registerAction(
+const registerAction = async (
   _prevState: RegisterState,
   formData: FormData,
-): Promise<RegisterState> {
-  const entries = Array.from(formData.entries());
-  const data = Object.fromEntries(entries) as RegisterFormData;
-
-  // Validação dos dados do formulário
-  const validation = validateRegisterForm(data);
-  if (!validation.isValid) {
-    const firstError = Object.values(validation.errors)[0];
-    return {
-      message: firstError,
-      success: false,
-    };
-  }
-
+): Promise<RegisterState> => {
   try {
-    // Gerar hash MD5 da senha (após validação)
-    const passwordMD5 = generateMD5Hash(data.password);
+    const name = formData.get("name") as string;
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
 
-    // Preparar dados para o serviço de autenticação
-    const signUpData = {
-      USER_ID: 1,
-      NAME: data.name,
-      EMAIL: data.email,
-      PASSWORD_MD5: passwordMD5,
-      INFO1: "Formulário Sign-up",
-    };
+    if (!name || !email || !password) {
+      return { success: false, message: "Todos os campos são obrigatórios!" };
+    }
 
-    // Chamar o serviço de cadastro
-    const result = await authService.tskAuthSignUp(signUpData);
-
-    // Verificar se o cadastro foi bem-sucedido
-    // StatusCode 100200 indica sucesso
-    if (result.statusCode === 100200 && result.recordId > 0) {
+    if (password.length < 6) {
       return {
-        message: "Usuário cadastrado com sucesso!",
-        success: true,
-      };
-    } else {
-      return {
-        message:
-          result.message || "Erro ao cadastrar usuário. Tente novamente.",
         success: false,
+        message: "A senha deve ter pelo menos 6 caracteres!",
       };
     }
+
+    // Usar Better Auth API para registrar usuário
+    await auth.api.signUpEmail({
+      body: {
+        name,
+        email,
+        password,
+      },
+    });
+
+    // Se chegamos aqui, o registro foi bem-sucedido, redirecionar para dashboard
+    redirect("/dashboard");
   } catch (error) {
-    console.error("Erro no cadastro:", error);
-
-    // Verificar se é um erro de validação específico
-    if (error instanceof Error) {
-      return {
-        message: error.message,
-        success: false,
-      };
+    if (isRedirectError(error)) {
+      throw error;
     }
 
-    return {
-      message: "Erro interno do servidor. Tente novamente.",
-      success: false,
-    };
+    console.log(error);
+
+    // Verificar se é erro de email já existe
+    if (error instanceof Error && error.message.includes("email")) {
+      return { success: false, message: "Este email já está sendo usado!" };
+    }
+
+    return { success: false, message: "Oops, algum erro aconteceu!" };
   }
-}
+};
 
 export default registerAction;
